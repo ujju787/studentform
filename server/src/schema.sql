@@ -1,0 +1,15 @@
+-- Schema for Student Authentication and Dashboard
+CREATE DATABASE IF NOT EXISTS student_db;
+USE student_db;
+
+CREATE TABLE IF NOT EXISTS students (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  roll_number VARCHAR(50) NOT NULL UNIQUE,
+  course VARCHAR(100) NOT NULL,
+  department VARCHAR(100) NOT NULL,
+  phone VARCHAR(20) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

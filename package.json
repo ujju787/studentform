@@ -1,0 +1,20 @@
+{
+  "name": "student-portal-root",
+  "version": "1.0.0",
+  "description": "Student registration, login, and dashboard with React, Node.js, and MySQL",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "start": "node server/src/server.js",
+    "server": "node --watch server/src/server.js",
+    "client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.12.0"
+  }
+}
