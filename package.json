@@ -7,7 +7,7 @@
     "start": "node server/src/server.js",
     "server": "node --watch server/src/server.js",
     "client": "npm --prefix client run dev",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install --include=dev && npm run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
