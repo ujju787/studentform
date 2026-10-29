@@ -6,19 +6,20 @@ const path = require('path');
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config();
 
-const dbName = process.env.DB_NAME || 'student_db';
+const connectionUri = process.env.MYSQL_ADDON_URI || process.env.DATABASE_URL;
+const dbName = process.env.MYSQL_ADDON_DB || process.env.DB_NAME || 'student_db';
 
 const baseConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  port: Number(process.env.DB_PORT) || 3306,
+  host: process.env.MYSQL_ADDON_HOST || process.env.DB_HOST || 'localhost',
+  user: process.env.MYSQL_ADDON_USER || process.env.DB_USER || 'root',
+  password: process.env.MYSQL_ADDON_PASSWORD || process.env.DB_PASSWORD || '',
+  port: Number(process.env.MYSQL_ADDON_PORT || process.env.DB_PORT) || 3306,
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
 };
 
-const poolConfig = process.env.DATABASE_URL
+const poolConfig = connectionUri
   ? {
-      uri: process.env.DATABASE_URL,
+      uri: connectionUri,
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
@@ -37,14 +38,14 @@ const pool = mysql.createPool(poolConfig);
 // Initialize database and tables automatically if not exists
 async function initializeDatabase() {
   try {
-    // If using individual parameters, ensure database exists first
-    if (!process.env.DATABASE_URL) {
+    // If using individual parameters without predefined cloud URI, ensure database exists
+    if (!connectionUri) {
       try {
         const rootConn = await mysql.createConnection(baseConfig);
         await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
         await rootConn.end();
       } catch (err) {
-        // If user permissions do not allow CREATE DATABASE, continue to connect to pool
+        // Continue if user does not have CREATE DATABASE permissions (common on cloud shared DBs)
       }
     }
 
